@@ -18,17 +18,17 @@ app.use(bodyParser.json());
 
 //Sending POST request
 app.post('/todos', (req, res) => {
-    
+
     //Creating a new Todo item
     let newTodo = new Todo({
         text: req.body.text,
     });
-    
+
     //Saving this item to database
     newTodo.save().then((doc) => {
         res.send(doc);
     }, (err) => {
-        res.status(400).send(err);
+        res.status(404).send(err);
     });
 });
 
@@ -37,7 +37,5 @@ app.listen(port, () => {
     console.log(`Server is started on port ${port}`);
 });
 
-
-
-
-
+//exporting app
+module.exports = {app};
