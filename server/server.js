@@ -6,6 +6,7 @@ let bodyParser = require('body-parser');
 let {mongoose} = require('./db/mongoose');
 let {Todo} = require('./models/todo');
 let {User} = require('./models/user');
+let {ObjectID} = require('mongodb');
 
 //Defining port
 const port = process.env.PORT || 3000;
@@ -39,8 +40,25 @@ app.get('/todos', (req, res) => {
     res.send({todos});
   }, (err) => {
     res.status(400).send(err);
-  })
-})
+  });
+});
+
+//Sending GET request along with id parameter
+app.get('/todos/:id', (req, res) => {
+  let id = req.params.id;
+  if(!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  Todo.findById(id).then((todo) => {
+    if(!todo){
+      return res.status(404).send();
+    }
+      res.send({todo});
+  }, (err) => {
+      res.status(400).send();
+  });
+});
 
 //app listening
 app.listen(port, () => {
