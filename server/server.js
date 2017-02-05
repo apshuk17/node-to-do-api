@@ -28,9 +28,19 @@ app.post('/todos', (req, res) => {
     newTodo.save().then((doc) => {
         res.send(doc);
     }, (err) => {
-        res.status(404).send(err);
+        res.status(400).send(err);
     });
 });
+
+//Sending GET request to retrieve all todos
+app.get('/todos', (req, res) => {
+
+  Todo.find({}).then((todos) => {
+    res.send({todos});
+  }, (err) => {
+    res.status(400).send(err);
+  })
+})
 
 //app listening
 app.listen(port, () => {
